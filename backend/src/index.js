@@ -8,6 +8,10 @@ const errorHandler = require('./middleware/errorHandler');
 
 const authRoutes = require('./routes/auth');
 const healthRoutes = require('./routes/health');
+const simulationRoutes = require('./routes/simulation');
+const recommendationRoutes = require('./routes/recommendations');
+const scenarioRoutes = require('./routes/scenarios');
+const mlRoutes = require('./routes/ml');
 
 const app = express();
 
@@ -50,6 +54,10 @@ app.use('/api/auth', authLimiter);
 // Mount Routes
 app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/simulation', simulationRoutes);
+app.use('/api/recommendations', recommendationRoutes);
+app.use('/api/scenarios', scenarioRoutes);
+app.use('/api/ml', mlRoutes);
 
 // 404 Handler
 app.use((req, res) => {

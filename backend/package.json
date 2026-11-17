@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
-    "test": "node --test tests/auth.test.js tests/simulation.test.js"
+    "test": "node --test tests/auth.test.js tests/simulation.test.js tests/api.test.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
