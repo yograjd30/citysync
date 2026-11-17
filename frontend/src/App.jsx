@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { SimulationProvider } from './context/SimulationContext';
 import { LivingBackground } from './components/layout/LivingBackground';
 import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
@@ -55,9 +56,11 @@ export default function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
+        <SimulationProvider>
+          <BrowserRouter>
+            <AppContent />
+          </BrowserRouter>
+        </SimulationProvider>
       </AuthProvider>
     </ThemeProvider>
   );
