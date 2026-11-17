@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+
+    /* Living Glass Dynamic Mesh Default (Calm Teal/Blue) */
+    --mesh-c1: rgba(13, 148, 136, 0.22); /* Teal 600 */
+    --mesh-c2: rgba(30, 58, 138, 0.28);  /* Blue 900 */
+    --mesh-c3: rgba(15, 23, 42, 0.95);   /* Slate 900 */
+
+    /* Glass Surface Tokens - Light */
+    --glass-bg: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.45);
+    --glass-highlight: rgba(255, 255, 255, 0.85);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+  }
+
+  .dark {
+    /* Glass Surface Tokens - Dark */
+    --glass-bg: rgba(15, 23, 42, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-highlight: rgba(255, 255, 255, 0.14);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  /* Prevent iPhone Safari auto-zoom on input focus */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Touch accessibility & tap styling */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Glassmorphism Classes with Safari Prefixes & Fallbacks */
+.glass-panel {
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 1rem;
+}
+
+@supports not (backdrop-filter: blur(18px)) {
+  .glass-panel {
+    background-color: rgba(15, 23, 42, 0.94);
+  }
+}
+
+/* 1px top highlight for frosted cards */
+.glass-highlight {
+  position: relative;
+}
+.glass-highlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--glass-highlight), transparent);
+  pointer-events: none;
+}
+
+/* Dynamic Breathing Background Transition */
+.living-bg {
+  transition: background 2.5s ease-in-out;
+}
