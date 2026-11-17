@@ -9,24 +9,49 @@
     --safe-bottom: env(safe-area-inset-bottom, 0px);
     --safe-left: env(safe-area-inset-left, 0px);
 
-    /* Living Glass Dynamic Mesh Default (Calm Teal/Blue) */
-    --mesh-c1: rgba(13, 148, 136, 0.22); /* Teal 600 */
-    --mesh-c2: rgba(30, 58, 138, 0.28);  /* Blue 900 */
-    --mesh-c3: rgba(15, 23, 42, 0.95);   /* Slate 900 */
+    /* Unslopped Ink Ramp - Dark Default */
+    --surface-page: #0a0c12;
+    --surface-card: #11141e;
+    --surface-raised: #181c28;
+    --surface-hover: #1e2333;
+    
+    --hairline: rgba(255, 255, 255, 0.07);
+    --hairline-focused: rgba(255, 255, 255, 0.14);
+    
+    --text-primary: #f0f2f7;
+    --text-secondary: #9aa1b2;
+    --text-muted: #646c80;
 
-    /* Glass Surface Tokens - Light */
-    --glass-bg: rgba(255, 255, 255, 0.72);
-    --glass-border: rgba(255, 255, 255, 0.45);
-    --glass-highlight: rgba(255, 255, 255, 0.85);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+    /* Single Focused Accents */
+    --accent: #22d3ee;
+    --accent-subtle: rgba(34, 211, 238, 0.12);
+    --accent-border: rgba(34, 211, 238, 0.28);
+
+    --status-normal: #10b981;
+    --status-warning: #f59e0b;
+    --status-critical: #ef4444;
   }
 
   .dark {
-    /* Glass Surface Tokens - Dark */
-    --glass-bg: rgba(15, 23, 42, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-highlight: rgba(255, 255, 255, 0.14);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --surface-page: #0a0c12;
+    --surface-card: #11141e;
+    --surface-raised: #181c28;
+    --surface-hover: #1e2333;
+    --hairline: rgba(255, 255, 255, 0.07);
+    --text-primary: #f0f2f7;
+    --text-secondary: #9aa1b2;
+    --text-muted: #646c80;
+  }
+
+  .light {
+    --surface-page: #f8fafc;
+    --surface-card: #ffffff;
+    --surface-raised: #f1f5f9;
+    --surface-hover: #e2e8f0;
+    --hairline: rgba(0, 0, 0, 0.08);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
   }
 
   /* Prevent iPhone Safari auto-zoom on input focus */
@@ -34,44 +59,42 @@
     font-size: 16px !important;
   }
 
-  /* Touch accessibility & tap styling */
+  /* Clean tabular figures for all data */
+  .font-tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Touch accessibility */
   * {
     -webkit-tap-highlight-color: transparent;
   }
-}
 
-/* Glassmorphism Classes with Safari Prefixes & Fallbacks */
-.glass-panel {
-  background-color: var(--glass-bg);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  border-radius: 1rem;
-}
-
-@supports not (backdrop-filter: blur(18px)) {
-  .glass-panel {
-    background-color: rgba(15, 23, 42, 0.94);
+  body {
+    background-color: var(--surface-page);
+    color: var(--text-primary);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-/* 1px top highlight for frosted cards */
-.glass-highlight {
-  position: relative;
-}
-.glass-highlight::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 10%;
-  right: 10%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--glass-highlight), transparent);
-  pointer-events: none;
+/* Precision Panel - Quiet Chrome, Crisp Inset Highlight */
+.precision-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--hairline);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 0.75rem;
 }
 
-/* Dynamic Breathing Background Transition */
-.living-bg {
-  transition: background 2.5s ease-in-out;
+/* Glass fallback for compatibility */
+.glass-panel {
+  background-color: var(--surface-card);
+  border: 1px solid var(--hairline);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 0.75rem;
+}
+
+/* Subtle hairline separators */
+.border-hairline {
+  border-color: var(--hairline);
 }

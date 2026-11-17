@@ -3,11 +3,11 @@ import { GlassCard } from '../components/common/GlassCard';
 import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
 import { useSimulation } from '../context/SimulationContext';
-import { ShieldCheck, AlertOctagon, Printer, FileText, Bookmark, Users, ChevronRight, Zap } from 'lucide-react';
+import { Printer, FileText } from 'lucide-react';
 import { apiRequest } from '../api/client';
 
 export function Resilience() {
-  const { step, seed, currentState } = useSimulation();
+  const { seed, currentState } = useSimulation();
   const [weakLinks, setWeakLinks] = useState(null);
   const [playbooks, setPlaybooks] = useState([]);
   const [showBriefModal, setShowBriefModal] = useState(false);
@@ -34,107 +34,102 @@ export function Resilience() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="font-heading text-xl font-bold text-white">Resilience, Weak Links &amp; Decision Brief</h2>
+            <h2 className="text-base font-semibold text-[var(--text-primary)]">Resilience, Weak Links &amp; Executive Brief</h2>
             <Badge type="Rule-based" />
           </div>
-          <p className="text-xs text-slate-400 mt-1 max-w-2xl">
-            Single-point-of-failure stress test matrix, executive Mayor Briefing layout, and tactical response playbooks.
+          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+            Full-network stress tests, single-point-of-failure ranking, and executive decision briefings.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button variant="primary" icon={FileText} onClick={() => setShowBriefModal(true)}>
-            Generate Mayor Briefing
-          </Button>
-        </div>
+        <Button variant="primary" size="sm" icon={FileText} onClick={() => setShowBriefModal(true)}>
+          Generate Executive Brief
+        </Button>
       </div>
 
-      {/* Resilience Score Overview */}
+      {/* Resilience KPI Overview */}
       {weakLinks && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
           <GlassCard className="p-4 flex flex-col justify-between">
-            <span className="text-xs text-slate-400 font-mono">Citywide Resilience Score</span>
-            <div className="flex items-baseline gap-2 mt-2">
-              <span className="text-3xl font-heading font-bold text-teal-400">
+            <span className="text-xs font-medium text-[var(--text-secondary)]">City Resilience Score</span>
+            <div className="flex items-baseline gap-1 mt-2 font-tabular">
+              <span className="text-3xl font-semibold text-emerald-400">
                 {weakLinks.cityResilienceScore}
               </span>
-              <span className="text-xs text-slate-400 font-mono">/ 100</span>
+              <span className="text-xs text-[var(--text-muted)] font-mono">/100</span>
             </div>
-            <div className="mt-2 text-[11px] text-slate-400 font-mono">
-              Composite resistance to single-node collapse
+            <div className="mt-2 text-[11px] text-[var(--text-muted)]">
+              Aggregate resistance to isolated node failure
             </div>
           </GlassCard>
 
           <GlassCard className="p-4 flex flex-col justify-between">
-            <span className="text-xs text-slate-400 font-mono">Most Dangerous Node</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">Highest Vulnerability</span>
             <div className="mt-2">
-              <div className="text-base font-heading font-bold text-rose-400">
+              <div className="text-sm font-semibold text-rose-400">
                 {weakLinks.rankedWeakLinks?.[0]?.zoneName} (Electricity)
               </div>
-              <div className="text-xs text-slate-300 font-mono mt-0.5">
-                Causes -{weakLinks.rankedWeakLinks?.[0]?.stabilityDrop} pts Stability Drop
+              <div className="text-xs text-[var(--text-muted)] font-mono mt-0.5 font-tabular">
+                -{weakLinks.rankedWeakLinks?.[0]?.stabilityDrop} pts potential drop
               </div>
             </div>
-            <div className="mt-2 text-[11px] text-slate-400 font-mono">
-              Centrality: {weakLinks.rankedWeakLinks?.[0]?.betweennessCentrality} (High Bottleneck)
+            <div className="mt-2 text-[11px] text-[var(--text-muted)]">
+              Centrality: {weakLinks.rankedWeakLinks?.[0]?.betweennessCentrality}
             </div>
           </GlassCard>
 
           <GlassCard className="p-4 flex flex-col justify-between">
-            <span className="text-xs text-slate-400 font-mono">Active Tactical Playbooks</span>
-            <div className="flex items-baseline gap-2 mt-2">
-              <span className="text-3xl font-heading font-bold text-cyan-400">
+            <span className="text-xs font-medium text-[var(--text-secondary)]">Validated Playbooks</span>
+            <div className="flex items-baseline gap-1 mt-2 font-tabular">
+              <span className="text-3xl font-semibold text-cyan-400">
                 {playbooks.length}
               </span>
-              <span className="text-xs text-slate-400 font-mono">Pre-validated</span>
+              <span className="text-xs text-[var(--text-muted)] font-mono">active</span>
             </div>
-            <div className="mt-2 text-[11px] text-slate-400 font-mono">
-              Average historical gain: +21.4 pts
+            <div className="mt-2 text-[11px] text-[var(--text-muted)]">
+              Avg historical recovery: +21.4 pts
             </div>
           </GlassCard>
         </div>
       )}
 
-      {/* Weak Link Finder Table */}
+      {/* Weak Links Table */}
       <GlassCard className="p-4">
-        <div className="flex items-center justify-between pb-3 border-b border-white/5">
-          <div className="flex items-center gap-2">
-            <AlertOctagon className="w-4 h-4 text-rose-400" />
-            <h3 className="font-heading text-sm font-semibold text-white">
-              Weak Link Finder: Ranked Points of Failure
-            </h3>
-          </div>
+        <div className="flex items-center justify-between pb-3 border-b border-[var(--hairline)]">
+          <h3 className="text-xs font-semibold text-[var(--text-primary)]">
+            Single Point of Failure Vulnerability Ranking
+          </h3>
           <Badge type="Rule-based" />
         </div>
 
-        <div className="mt-3 overflow-x-auto">
-          <table className="w-full text-left text-xs font-mono">
+        <div className="mt-2 overflow-x-auto">
+          <table className="w-full text-left text-xs font-mono font-tabular">
             <thead>
-              <tr className="border-b border-white/5 text-slate-400">
+              <tr className="border-b border-[var(--hairline)] text-[var(--text-muted)]">
                 <th className="pb-2 font-medium">Rank</th>
-                <th className="pb-2 font-medium">Node</th>
+                <th className="pb-2 font-medium">Infrastructure Node</th>
                 <th className="pb-2 font-medium">System</th>
-                <th className="pb-2 font-medium">Potential Stability Drop</th>
-                <th className="pb-2 font-medium">Critical Nodes Induced</th>
-                <th className="pb-2 font-medium">Residents Exposed</th>
+                <th className="pb-2 font-medium">Impact Drop</th>
+                <th className="pb-2 font-medium">Critical Tripped</th>
+                <th className="pb-2 font-medium">Population Exposed</th>
                 <th className="pb-2 font-medium">Centrality</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-[var(--hairline)]">
               {weakLinks?.rankedWeakLinks?.slice(0, 8).map((link) => (
-                <tr key={link.nodeId} className="hover:bg-white/5 transition-colors">
-                  <td className="py-2.5 font-bold text-teal-400">#{link.dangerRank}</td>
-                  <td className="py-2.5 font-sans font-medium text-white">{link.zoneName}</td>
-                  <td className="py-2.5 capitalize text-slate-300">{link.system}</td>
-                  <td className="py-2.5 text-rose-400 font-bold">-{link.stabilityDrop} pts</td>
-                  <td className="py-2.5 text-slate-300">{link.nodesInCritical} Nodes</td>
-                  <td className="py-2.5 text-slate-300">~{link.residentsAffected.toLocaleString()}</td>
-                  <td className="py-2.5 text-slate-400">{link.betweennessCentrality}</td>
+                <tr key={link.nodeId} className="hover:bg-white/[0.02] transition-colors">
+                  <td className="py-2 font-semibold text-[var(--text-muted)]">0{link.dangerRank}</td>
+                  <td className="py-2 text-[var(--text-primary)] font-sans">{link.zoneName}</td>
+                  <td className="py-2 capitalize text-[var(--text-secondary)]">{link.system}</td>
+                  <td className="py-2 text-rose-400 font-semibold">-{link.stabilityDrop} pts</td>
+                  <td className="py-2 text-[var(--text-secondary)]">{link.nodesInCritical} Nodes</td>
+                  <td className="py-2 text-[var(--text-secondary)]">~{link.residentsAffected.toLocaleString()}</td>
+                  <td className="py-2 text-[var(--text-muted)]">{link.betweennessCentrality}</td>
                 </tr>
               ))}
             </tbody>
@@ -142,113 +137,72 @@ export function Resilience() {
         </div>
       </GlassCard>
 
-      {/* Playbooks Section */}
-      <GlassCard className="p-4">
-        <div className="flex items-center justify-between pb-3 border-b border-white/5">
-          <div className="flex items-center gap-2">
-            <Bookmark className="w-4 h-4 text-teal-400" />
-            <h3 className="font-heading text-sm font-semibold text-white">
-              Validated Infrastructure Response Playbooks
-            </h3>
-          </div>
-          <Badge type="Rule-based" />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
-          {playbooks.map((pb) => (
-            <div
-              key={pb._id}
-              className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <h4 className="font-heading text-sm font-bold text-white">{pb.name}</h4>
-                  <Badge variant="normal">+{pb.avgStabilityGain} pts Avg Gain</Badge>
-                </div>
-                <p className="text-xs text-slate-300 mt-1.5">{pb.description}</p>
-                <div className="mt-3 text-[11px] font-mono text-slate-400">
-                  Times Deployed: {pb.timesUsed} runs | Actions: {pb.interventions?.length || 2}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </GlassCard>
-
-      {/* Signature Innovation: Mayor Decision Brief (Print-Friendly Executive Modal) */}
+      {/* Printable Mayor Decision Brief Modal */}
       {showBriefModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-slate-900 border border-teal-500/50 rounded-2xl shadow-2xl p-6 print:bg-white print:text-black print:border-none print:shadow-none">
-            {/* Brief Header */}
-            <div className="flex items-start justify-between pb-4 border-b border-white/10 print:border-black/20">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-[var(--surface-card)] border border-[var(--hairline)] rounded-xl shadow-2xl p-6 print:bg-white print:text-black print:border-none">
+            {/* Header */}
+            <div className="flex items-start justify-between pb-3.5 border-b border-[var(--hairline)]">
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono uppercase tracking-wider text-teal-400 font-bold">
-                    Official Executive Briefing
-                  </span>
-                  <Badge type="Simulated" />
-                </div>
-                <h2 className="font-heading text-xl font-bold text-white print:text-black mt-1">
-                  CitySync Situation Report: Infrastructure Synchronization
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)]">
+                  Executive Briefing
+                </span>
+                <h2 className="text-base font-semibold text-[var(--text-primary)] mt-0.5">
+                  CitySync Operational Brief: Infrastructure Telemetry
                 </h2>
-                <div className="text-xs text-slate-400 print:text-gray-600 font-mono mt-0.5">
+                <div className="text-[11px] text-[var(--text-muted)] font-mono mt-0.5 font-tabular">
                   Simulation Clock: {currentState?.timeFormatted || '12:00'} | Seed #42
                 </div>
               </div>
 
               <div className="flex items-center gap-2 print:hidden">
                 <Button variant="primary" size="sm" icon={Printer} onClick={handlePrint}>
-                  Print / Save PDF
+                  Print / PDF
                 </Button>
-                <Button variant="glass" size="sm" onClick={() => setShowBriefModal(false)}>
+                <Button variant="secondary" size="sm" onClick={() => setShowBriefModal(false)}>
                   Close
                 </Button>
               </div>
             </div>
 
-            {/* Brief Body */}
-            <div className="mt-5 space-y-4 text-xs leading-relaxed text-slate-200 print:text-black">
-              {/* Section 1: What is happening */}
-              <div className="p-3.5 rounded-xl bg-slate-950/60 print:bg-gray-100 border border-white/5 print:border-gray-300">
-                <h4 className="font-heading font-bold text-teal-400 print:text-teal-800 text-sm mb-1">
-                  1. Current Operational Status
+            {/* Briefing Body */}
+            <div className="mt-4 space-y-3.5 text-xs leading-relaxed text-[var(--text-secondary)]">
+              <div className="p-3 rounded-lg bg-[var(--surface-raised)] border border-[var(--hairline)]">
+                <h4 className="font-semibold text-[var(--text-primary)] text-xs mb-1">
+                  1. Current Status
                 </h4>
                 <p>
-                  The municipal stability index stands at <strong>{currentState?.stabilityIndex}/100</strong>.
-                  Currently, <strong>{currentState?.nodesInCritical} infrastructure nodes</strong> have exceeded
-                  critical stress thresholds (&gt;70%), and <strong>{currentState?.nodesInWarning} nodes</strong> are in warning.
+                  City stability is at <strong className="text-[var(--text-primary)]">{currentState?.stabilityIndex}/100</strong>.
+                  Currently, <strong className="text-[var(--text-primary)]">{currentState?.nodesInCritical} nodes</strong> exceed
+                  the critical threshold (&gt;70%), and {currentState?.nodesInWarning} nodes are in warning.
                 </p>
               </div>
 
-              {/* Section 2: What comes next */}
-              <div className="p-3.5 rounded-xl bg-slate-950/60 print:bg-gray-100 border border-white/5 print:border-gray-300">
-                <h4 className="font-heading font-bold text-amber-400 print:text-amber-800 text-sm mb-1">
-                  2. Trajectory &amp; Time to Breach
+              <div className="p-3 rounded-lg bg-[var(--surface-raised)] border border-[var(--hairline)]">
+                <h4 className="font-semibold text-[var(--text-primary)] text-xs mb-1">
+                  2. Projected Trajectory
                 </h4>
                 <p>
-                  Deterministic coupling models project spillover congestion and grid transformer heating.
-                  If unaddressed, the highest-risk node will breach critical status in approximately <strong>25 minutes</strong>,
-                  exposing an estimated <strong>120,000 residents</strong> to rolling brownouts and water delivery pressure drops.
+                  Coupled simulation projects secondary corridor congestion in ~25 minutes,
+                  exposing an estimated 120,000 citizens to localized voltage sag and pressure loss.
                 </p>
               </div>
 
-              {/* Section 3: Recommended Action */}
-              <div className="p-3.5 rounded-xl bg-teal-950/30 print:bg-teal-50 border border-teal-500/30 print:border-teal-200">
-                <h4 className="font-heading font-bold text-emerald-400 print:text-emerald-800 text-sm mb-1">
-                  3. Executive Recommended Intervention
+              <div className="p-3 rounded-lg bg-[var(--surface-raised)] border border-[var(--hairline)]">
+                <h4 className="font-semibold text-[var(--text-primary)] text-xs mb-1">
+                  3. Recommended Response
                 </h4>
                 <p>
-                  <strong>Recommended Action:</strong> Enforce Dynamic Corridor Rerouting around Stadium District
-                  and curtail non-essential industrial grid load in Industrial Estate.
+                  Enforce Dynamic Corridor Rerouting around Stadium District and curtail non-essential industrial draw.
                 </p>
-                <div className="mt-2 font-mono text-[11px] text-teal-300 print:text-teal-900">
-                  Projected Gain: +18.5 stability points | 2 Critical Breaches Averted | ~65,000 Citizens Protected
+                <div className="mt-2 font-mono text-[11px] text-emerald-400">
+                  Projected Gain: +18.5 stability points | 2 Critical Breaches Averted
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-white/10 print:border-black/20 text-center text-[11px] text-slate-500 font-mono">
-              Prepared deterministically by CitySync Intelligence Engine. No external AI APIs queried.
+            <div className="mt-5 pt-3 border-t border-[var(--hairline)] text-center text-[10px] text-[var(--text-muted)] font-mono">
+              Deterministic CitySync engine. Zero external AI API reliance.
             </div>
           </div>
         </div>

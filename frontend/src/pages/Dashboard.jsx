@@ -35,7 +35,6 @@ import {
   Lightbulb,
   ShieldCheck,
   Cpu,
-  Command,
 } from 'lucide-react';
 
 export function Dashboard() {
@@ -77,52 +76,52 @@ export function Dashboard() {
   ];
 
   return (
-    <div className="min-h-[100dvh] w-full flex flex-col p-3 sm:p-5 md:p-6 lg:p-8 max-w-7xl mx-auto">
-      {/* Top Header */}
-      <header className="w-full flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-white/10 gap-3">
-        {/* Left: Brand & Honesty Badge */}
+    <div className="min-h-[100dvh] w-full flex flex-col p-3 sm:p-5 md:p-6 max-w-7xl mx-auto">
+      {/* Top Header - Quiet, Authoritative Chrome */}
+      <header className="w-full flex flex-col md:flex-row md:items-center justify-between pb-3.5 border-b border-[var(--hairline)] gap-3">
+        {/* Left: Brand Wordmark & Telemetry Label */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-400 shadow-lg shadow-teal-500/10">
-            <Activity className="w-5 h-5" />
+          <div className="w-8 h-8 rounded-lg bg-[var(--surface-raised)] border border-[var(--hairline)] flex items-center justify-center text-cyan-400">
+            <Activity className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="font-heading text-lg font-bold tracking-tight text-white">
+              <h1 className="text-sm font-semibold tracking-tight text-[var(--text-primary)]">
                 CitySync
               </h1>
               <Badge type="Simulated" />
               {user?.isGuestDemo && (
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                  Evaluator Demo Mode
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-[3px] bg-slate-800 text-[var(--text-muted)] border border-white/[0.06]">
+                  Demo
                 </span>
               )}
             </div>
-            <p className="text-[11px] text-teal-400/80 font-mono">
-              "See the chain reaction before it happens"
+            <p className="text-[11px] text-[var(--text-secondary)]">
+              Interconnected infrastructure telemetry &amp; cascade intelligence
             </p>
           </div>
         </div>
 
-        {/* Right: Command Bar trigger, Theme toggle, Profile */}
-        <div className="flex items-center justify-between md:justify-end gap-2.5">
+        {/* Right: Search, Theme Toggle, Profile */}
+        <div className="flex items-center justify-between md:justify-end gap-2">
           {/* Command Bar Button */}
           <button
             onClick={() => setIsCommandBarOpen(true)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-slate-700/60 text-xs text-slate-300 transition-all"
+            className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[var(--surface-raised)] hover:bg-[var(--surface-hover)] border border-[var(--hairline)] text-xs text-[var(--text-secondary)] transition-colors"
           >
-            <Search className="w-3.5 h-3.5 text-teal-400" />
-            <span className="hidden sm:inline">Command Bar</span>
-            <kbd className="hidden sm:inline text-[10px] font-mono px-1 rounded bg-slate-800 text-slate-400 border border-slate-700">
+            <Search className="w-3.5 h-3.5 text-[var(--text-muted)]" />
+            <span className="hidden sm:inline">Search actions</span>
+            <kbd className="hidden sm:inline text-[10px] font-mono px-1 rounded bg-black/30 text-[var(--text-muted)] border border-white/[0.06]">
               Ctrl+K
             </kbd>
           </button>
 
           {/* Theme Switcher */}
-          <div className="flex items-center gap-1 bg-slate-900/60 border border-slate-700/50 rounded-xl p-1">
+          <div className="flex items-center gap-0.5 bg-[var(--surface-raised)] border border-[var(--hairline)] rounded-lg p-0.5">
             <button
               onClick={() => setTheme('light')}
-              className={`p-1.5 rounded-lg transition-all ${
-                theme === 'light' ? 'bg-teal-500/20 text-teal-300' : 'text-slate-400 hover:text-slate-200'
+              className={`p-1 rounded transition-colors ${
+                theme === 'light' ? 'bg-white/10 text-[var(--text-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
               }`}
               title="Light theme"
             >
@@ -130,8 +129,8 @@ export function Dashboard() {
             </button>
             <button
               onClick={() => setTheme('dark')}
-              className={`p-1.5 rounded-lg transition-all ${
-                theme === 'dark' ? 'bg-teal-500/20 text-teal-300' : 'text-slate-400 hover:text-slate-200'
+              className={`p-1 rounded transition-colors ${
+                theme === 'dark' ? 'bg-white/10 text-[var(--text-primary)]' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
               }`}
               title="Dark theme"
             >
@@ -139,27 +138,31 @@ export function Dashboard() {
             </button>
           </div>
 
-          {/* User & Logout */}
-          <div className="flex items-center gap-2 pl-2">
+          {/* User & Sign Out */}
+          <div className="flex items-center gap-2 pl-2 border-l border-[var(--hairline)]">
             {user?.avatar && (
               <img
                 src={user.avatar}
                 alt={user.name}
-                className="w-7 h-7 rounded-full border border-teal-400/40 object-cover"
+                className="w-6 h-6 rounded-full border border-[var(--hairline)] object-cover"
               />
             )}
-            <span className="hidden lg:inline text-xs font-medium text-slate-300">
+            <span className="hidden lg:inline text-xs text-[var(--text-secondary)]">
               {user?.name?.split(' ')[0]}
             </span>
-            <Button variant="glass" size="sm" icon={LogOut} onClick={logout} title="Sign Out">
-              <span className="hidden sm:inline">Sign Out</span>
-            </Button>
+            <button
+              onClick={logout}
+              className="p-1 rounded text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+              title="Sign Out"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Navigation Pills Bar */}
-      <nav className="w-full flex items-center gap-1.5 overflow-x-auto py-3 border-b border-white/5 scrollbar-none">
+      {/* Navigation - Segmented Control, Zero Neon Glow */}
+      <nav className="w-full flex items-center gap-1 overflow-x-auto py-2.5 border-b border-[var(--hairline)] scrollbar-none">
         {navTabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -167,13 +170,13 @@ export function Dashboard() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
                 isActive
-                  ? 'bg-teal-500 text-slate-950 font-bold shadow-lg shadow-teal-500/20'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                  ? 'bg-[var(--surface-raised)] text-[var(--text-primary)] border border-[var(--hairline-focused)] font-semibold shadow-xs'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/[0.03]'
               }`}
             >
-              <Icon className="w-3.5 h-3.5" />
+              <Icon className="w-3.5 h-3.5 text-[var(--text-muted)]" />
               {tab.label}
             </button>
           );
@@ -181,10 +184,10 @@ export function Dashboard() {
       </nav>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col gap-5 py-4">
+      <main className="flex-1 flex flex-col gap-4 py-4">
         {activeTab === 'dashboard' && (
           <>
-            {/* Evaluator Guided Tour */}
+            {/* System Status Banner */}
             <GuidedFirstRun onSelectTab={setActiveTab} />
 
             {/* KPI Cards Row */}
@@ -204,7 +207,7 @@ export function Dashboard() {
             />
 
             {/* Main Interactive Map & Feed Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
               {/* Map Canvas (7 cols) */}
               <div className="lg:col-span-7 flex flex-col gap-4">
                 <IsometricMap

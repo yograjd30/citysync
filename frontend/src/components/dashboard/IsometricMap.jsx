@@ -1,20 +1,18 @@
 import React from 'react';
 import { GlassCard } from '../common/GlassCard';
 import { Badge } from '../common/Badge';
-import { Car, Zap, Droplets, MapPin, Eye } from 'lucide-react';
 
 const ZONE_COORDINATES = {
-  residential_north: { x: 260, y: 60, label: 'Residential North' },
-  old_town: { x: 100, y: 110, label: 'Old Town' },
-  tech_park: { x: 420, y: 110, label: 'Tech Park' },
-  downtown: { x: 260, y: 180, label: 'Downtown Core' },
-  industrial: { x: 90, y: 270, label: 'Industrial Estate' },
-  stadium: { x: 260, y: 280, label: 'Stadium District' },
-  port_airport: { x: 430, y: 270, label: 'Port & Airport' },
-  residential_south: { x: 260, y: 380, label: 'Residential South' },
+  residential_north: { x: 260, y: 55, label: 'Residential North' },
+  old_town: { x: 100, y: 105, label: 'Old Town' },
+  tech_park: { x: 420, y: 105, label: 'Tech Park' },
+  downtown: { x: 260, y: 175, label: 'Downtown Core' },
+  industrial: { x: 90, y: 265, label: 'Industrial Estate' },
+  stadium: { x: 260, y: 275, label: 'Stadium District' },
+  port_airport: { x: 430, y: 265, label: 'Port & Airport' },
+  residential_south: { x: 260, y: 375, label: 'Residential South' },
 };
 
-// Adjacency connections to draw links
 const LINKS = [
   ['residential_north', 'old_town'],
   ['residential_north', 'downtown'],
@@ -34,17 +32,15 @@ const LINKS = [
 ];
 
 function getStressColor(stress) {
-  if (stress >= 70) return '#f43f5e'; // Rose
-  if (stress >= 40) return '#fbbf24'; // Amber
-  return '#2dd4bf'; // Teal
+  if (stress >= 70) return '#ef4444'; // Red
+  if (stress >= 40) return '#f59e0b'; // Amber
+  return '#10b981'; // Green
 }
 
 export function IsometricMap({ currentState, selectedZone, onSelectZone }) {
   if (!currentState) return null;
 
   const { zones } = currentState;
-
-  // Map zone data by zoneId
   const zoneMap = {};
   zones.forEach((z) => {
     zoneMap[z.zoneId] = z;
@@ -52,41 +48,36 @@ export function IsometricMap({ currentState, selectedZone, onSelectZone }) {
 
   return (
     <GlassCard className="p-4 flex flex-col h-full min-h-[480px]">
-      <div className="flex items-center justify-between pb-3 border-b border-white/5">
-        <div className="flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-teal-400" />
-          <h3 className="font-heading text-sm font-semibold text-white">
-            Synthetic City Infrastructure Map (8 Zones)
+      <div className="flex items-center justify-between pb-3 border-b border-[var(--hairline)]">
+        <div>
+          <h3 className="text-xs font-semibold text-[var(--text-primary)]">
+            Metropolitan Topology (8 Sectors)
           </h3>
+          <p className="text-[11px] text-[var(--text-muted)] font-mono mt-0.5">
+            Coupled dependency graph • Click node to inspect
+          </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Badge type="Simulated" />
-          <div className="hidden sm:flex items-center gap-3 text-[11px] font-mono text-slate-400">
-            <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-teal-400" /> &lt;40 Normal
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-amber-400" /> 40-70 Warning
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-rose-400" /> &gt;70 Critical
-            </span>
-          </div>
+
+        <div className="flex items-center gap-4 text-[11px] font-mono text-[var(--text-secondary)]">
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> &lt;40% Nominal
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> 40–70% Warning
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-rose-500" /> &gt;70% Critical
+          </span>
         </div>
       </div>
 
-      {/* SVG Interactive Canvas */}
+      {/* SVG Canvas */}
       <div className="relative flex-1 w-full flex items-center justify-center p-2">
-        <svg viewBox="0 0 540 440" className="w-full h-full max-h-[440px] select-none">
-          {/* Background grid lines */}
+        <svg viewBox="0 0 540 430" className="w-full h-full max-h-[430px] select-none">
           <defs>
-            <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
-              <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255, 255, 255, 0.03)" strokeWidth="1" />
+            <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+              <path d="M 28 0 L 0 0 0 28" fill="none" stroke="rgba(255, 255, 255, 0.018)" strokeWidth="1" />
             </pattern>
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="6" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
 
@@ -109,19 +100,16 @@ export function IsometricMap({ currentState, selectedZone, onSelectZone }) {
                     y1={src.y}
                     x2={tgt.x}
                     y2={tgt.y}
-                    stroke={isStressedLink ? 'rgba(244, 63, 94, 0.6)' : 'rgba(148, 163, 184, 0.2)'}
-                    strokeWidth={isStressedLink ? '2.5' : '1.5'}
-                    strokeDasharray={isStressedLink ? '4,4' : 'none'}
-                    className={isStressedLink ? 'animate-pulse' : ''}
+                    stroke={isStressedLink ? 'rgba(239, 68, 68, 0.5)' : 'rgba(255, 255, 255, 0.07)'}
+                    strokeWidth={isStressedLink ? '1.5' : '1'}
+                    strokeDasharray={isStressedLink ? '3,3' : 'none'}
                   />
-                  {/* Ripple pulse dot moving along link if stressed */}
                   {isStressedLink && (
                     <circle
                       cx={(src.x + tgt.x) / 2}
                       cy={(src.y + tgt.y) / 2}
-                      r="3.5"
-                      fill="#f43f5e"
-                      className="animate-ping"
+                      r="2"
+                      fill="#ef4444"
                     />
                   )}
                 </g>
@@ -147,110 +135,96 @@ export function IsometricMap({ currentState, selectedZone, onSelectZone }) {
                 onClick={() => onSelectZone(zoneId)}
                 className="cursor-pointer group"
               >
-                {/* Selection Highlight Ring */}
+                {/* Selection Ring */}
                 {isSelected && (
-                  <circle
-                    r="44"
-                    fill="none"
-                    stroke="#2dd4bf"
-                    strokeWidth="2"
-                    strokeDasharray="5,3"
-                    className="animate-spin"
-                    style={{ animationDuration: '8s' }}
-                  />
-                )}
-
-                {/* Ripple Shockwave if Critical */}
-                {avgStress >= 70 && (
                   <circle
                     r="40"
                     fill="none"
-                    stroke="#f43f5e"
-                    strokeWidth="1.5"
-                    className="animate-ping opacity-75"
+                    stroke="rgba(255, 255, 255, 0.3)"
+                    strokeWidth="1"
+                    strokeDasharray="3,3"
                   />
                 )}
 
-                {/* Base Zone Plate */}
+                {/* Base Plate */}
                 <circle
-                  r="34"
-                  fill="rgba(15, 23, 42, 0.88)"
-                  stroke={mainColor}
-                  strokeWidth={isSelected ? '3' : '2'}
-                  filter={avgStress >= 70 ? 'url(#glow)' : undefined}
-                  className="transition-all duration-300 group-hover:scale-105"
+                  r="32"
+                  fill="#0e111a"
+                  stroke={isSelected ? '#ffffff' : 'rgba(255, 255, 255, 0.1)'}
+                  strokeWidth={isSelected ? '1.5' : '1'}
+                  className="transition-colors duration-150"
                 />
 
-                {/* Inner Zone Label */}
+                {/* Status Rim Arc Indicator */}
+                <circle
+                  r="32"
+                  fill="none"
+                  stroke={mainColor}
+                  strokeWidth="2"
+                  strokeDasharray={`${(avgStress / 100) * 201} 201`}
+                  strokeLinecap="round"
+                  transform="rotate(-90)"
+                />
+
+                {/* Label */}
                 <text
-                  y="-12"
+                  y="-11"
                   textAnchor="middle"
-                  fill="#ffffff"
+                  fill="#f0f2f7"
                   fontSize="9.5"
-                  fontWeight="600"
-                  fontFamily="Inter, sans-serif"
+                  fontWeight="500"
+                  fontFamily="Inter, -apple-system, sans-serif"
                 >
                   {data.name.split(' ')[0]}
                 </text>
 
-                {/* Mini System Bars (Traffic, Electricity, Water) */}
-                <g transform="translate(-16, 2)">
+                {/* 3 Mini System Indicator Bars */}
+                <g transform="translate(-15, 1)">
                   {/* Traffic */}
-                  <rect x="0" y="0" width="8" height="14" rx="1.5" fill="rgba(30, 41, 59, 0.8)" />
+                  <rect x="0" y="0" width="7" height="12" rx="1" fill="rgba(255, 255, 255, 0.05)" />
                   <rect
                     x="0"
-                    y={14 - (data.traffic.stress / 100) * 14}
-                    width="8"
-                    height={(data.traffic.stress / 100) * 14}
-                    rx="1.5"
+                    y={12 - (data.traffic.stress / 100) * 12}
+                    width="7"
+                    height={(data.traffic.stress / 100) * 12}
+                    rx="1"
                     fill={getStressColor(data.traffic.stress)}
                   />
 
                   {/* Electricity */}
-                  <rect x="12" y="0" width="8" height="14" rx="1.5" fill="rgba(30, 41, 59, 0.8)" />
+                  <rect x="11.5" y="0" width="7" height="12" rx="1" fill="rgba(255, 255, 255, 0.05)" />
                   <rect
-                    x="12"
-                    y={14 - (data.electricity.stress / 100) * 14}
-                    width="8"
-                    height={(data.electricity.stress / 100) * 14}
-                    rx="1.5"
+                    x="11.5"
+                    y={12 - (data.electricity.stress / 100) * 12}
+                    width="7"
+                    height={(data.electricity.stress / 100) * 12}
+                    rx="1"
                     fill={getStressColor(data.electricity.stress)}
                   />
 
                   {/* Water */}
-                  <rect x="24" y="0" width="8" height="14" rx="1.5" fill="rgba(30, 41, 59, 0.8)" />
+                  <rect x="23" y="0" width="7" height="12" rx="1" fill="rgba(255, 255, 255, 0.05)" />
                   <rect
-                    x="24"
-                    y={14 - (data.water.stress / 100) * 14}
-                    width="8"
-                    height={(data.water.stress / 100) * 14}
-                    rx="1.5"
+                    x="23"
+                    y={12 - (data.water.stress / 100) * 12}
+                    width="7"
+                    height={(data.water.stress / 100) * 12}
+                    rx="1"
                     fill={getStressColor(data.water.stress)}
                   />
                 </g>
 
-                {/* Stress Badge Below */}
-                <g transform="translate(0, 24)">
-                  <rect
-                    x="-14"
-                    y="-5"
-                    width="28"
-                    height="10"
-                    rx="5"
-                    fill={mainColor}
-                    fillOpacity="0.25"
-                  />
-                  <text
-                    y="2.5"
-                    textAnchor="middle"
-                    fill={mainColor}
-                    fontSize="7.5"
-                    fontWeight="700"
-                    fontFamily="monospace"
-                  >
-                    {avgStress}%
-                  </text>
-                </g>
+                {/* Tabular Stress Readout */}
+                <text
+                  y="22"
+                  textAnchor="middle"
+                  fill={mainColor}
+                  fontSize="8.5"
+                  fontWeight="600"
+                  fontFamily="monospace"
+                >
+                  {avgStress}%
+                </text>
               </g>
             );
           })}

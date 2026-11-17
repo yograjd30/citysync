@@ -1,61 +1,53 @@
 import React from 'react';
 import { GlassCard } from '../common/GlassCard';
 import { Badge } from '../common/Badge';
-import { ShieldCheck, AlertTriangle, AlertOctagon, GitMerge, TrendingUp, TrendingDown } from 'lucide-react';
 
 export function KPIRow({ currentState, pulseHistory }) {
   if (!currentState) return null;
 
-  const { stabilityIndex, nodesInCritical, nodesInWarning, zones } = currentState;
+  const { stabilityIndex, nodesInCritical, nodesInWarning } = currentState;
 
-  // Compute status variant
-  const stabilityStatus = stabilityIndex >= 70 ? 'normal' : stabilityIndex >= 40 ? 'warning' : 'critical';
-
-  // Compute mini sparkline path
+  // Mini sparkline calculation
   const minVal = Math.min(...pulseHistory, 40);
   const maxVal = Math.max(...pulseHistory, 100);
   const range = maxVal - minVal || 1;
-  const svgWidth = 100;
-  const svgHeight = 28;
+  const svgWidth = 88;
+  const svgHeight = 24;
 
   const points = pulseHistory
     .map((val, idx) => {
       const x = (idx / (pulseHistory.length - 1 || 1)) * svgWidth;
-      const y = svgHeight - ((val - minVal) / range) * (svgHeight - 6) - 3;
+      const y = svgHeight - ((val - minVal) / range) * (svgHeight - 4) - 2;
       return `${x.toFixed(1)},${y.toFixed(1)}`;
     })
     .join(' ');
 
-  // Compute cascade depth (simulated rule-based based on critical nodes count)
   const cascadeDepth = nodesInCritical > 0 ? Math.min(4, Math.ceil(nodesInCritical / 2)) : 0;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
       {/* 1. City Stability Index */}
-      <GlassCard variant={stabilityStatus} className="p-4 relative overflow-hidden">
+      <GlassCard className="p-4 flex flex-col justify-between">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-teal-400" />
-            <span className="text-xs font-medium text-slate-300">Stability Index</span>
-          </div>
+          <span className="text-xs font-medium text-[var(--text-secondary)]">Stability Index</span>
           <Badge type="Simulated" />
         </div>
 
-        <div className="mt-3 flex items-baseline justify-between">
-          <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-heading font-bold text-white tracking-tight">
+        <div className="mt-2.5 flex items-baseline justify-between">
+          <div className="flex items-baseline gap-1.5 font-tabular">
+            <span className="text-3xl font-semibold tracking-tight text-[var(--text-primary)]">
               {stabilityIndex}
             </span>
-            <span className="text-xs text-slate-400 font-mono">/ 100</span>
+            <span className="text-xs text-[var(--text-muted)] font-mono">/100</span>
           </div>
 
-          {/* SVG Sparkline */}
-          <div className="w-24 h-7">
+          {/* Thin, clean SVG Sparkline */}
+          <div className="w-20 h-6">
             <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-full overflow-visible">
               <polyline
                 fill="none"
-                stroke={stabilityIndex >= 70 ? '#2dd4bf' : stabilityIndex >= 40 ? '#fbbf24' : '#f43f5e'}
-                strokeWidth="2"
+                stroke={stabilityIndex >= 70 ? '#10b981' : stabilityIndex >= 40 ? '#f59e0b' : '#ef4444'}
+                strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 points={points}
@@ -64,86 +56,70 @@ export function KPIRow({ currentState, pulseHistory }) {
           </div>
         </div>
 
-        <div className="mt-2 flex items-center gap-2 text-[11px] text-slate-400 font-mono">
+        <div className="mt-2 flex items-center gap-1.5 text-[11px] text-[var(--text-muted)]">
           <span
-            className={`w-2 h-2 rounded-full animate-pulse ${
-              stabilityIndex >= 70 ? 'bg-teal-400' : stabilityIndex >= 40 ? 'bg-amber-400' : 'bg-rose-400'
+            className={`w-1.5 h-1.5 rounded-full ${
+              stabilityIndex >= 70 ? 'bg-emerald-400' : stabilityIndex >= 40 ? 'bg-amber-400' : 'bg-rose-400'
             }`}
           />
-          {stabilityIndex >= 70 ? 'City Grid Synchronized' : stabilityIndex >= 40 ? 'Cross-System Stress' : 'Critical Failure Cascade'}
+          {stabilityIndex >= 70 ? 'Nominal grid synchrony' : stabilityIndex >= 40 ? 'Coupled stress detected' : 'Cascade in progress'}
         </div>
       </GlassCard>
 
       {/* 2. Critical Nodes */}
-      <GlassCard variant={nodesInCritical > 0 ? 'critical' : 'default'} className="p-4">
+      <GlassCard className="p-4 flex flex-col justify-between">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <AlertOctagon className={`w-4 h-4 ${nodesInCritical > 0 ? 'text-rose-400' : 'text-slate-400'}`} />
-            <span className="text-xs font-medium text-slate-300">Nodes in Critical</span>
-          </div>
+          <span className="text-xs font-medium text-[var(--text-secondary)]">Critical Nodes</span>
           <Badge type="Rule-based" />
         </div>
 
-        <div className="mt-3 flex items-baseline justify-between">
-          <div className="flex items-baseline gap-2">
-            <span className={`text-3xl font-heading font-bold tracking-tight ${nodesInCritical > 0 ? 'text-rose-400' : 'text-white'}`}>
-              {nodesInCritical}
-            </span>
-            <span className="text-xs text-slate-400 font-mono">/ 24 total</span>
-          </div>
+        <div className="mt-2.5 flex items-baseline gap-1.5 font-tabular">
+          <span className={`text-3xl font-semibold tracking-tight ${nodesInCritical > 0 ? 'text-rose-400' : 'text-[var(--text-primary)]'}`}>
+            {nodesInCritical}
+          </span>
+          <span className="text-xs text-[var(--text-muted)] font-mono">/ 24 total</span>
         </div>
 
-        <div className="mt-2 text-[11px] text-slate-400 font-mono flex items-center justify-between">
-          <span>Stress &gt; 70% threshold</span>
-          {nodesInCritical > 0 && <span className="text-rose-400 font-semibold">Action Required</span>}
+        <div className="mt-2 text-[11px] text-[var(--text-muted)]">
+          {nodesInCritical > 0 ? 'Stress > 70% threshold' : 'Zero nodes past threshold'}
         </div>
       </GlassCard>
 
       {/* 3. Warning Nodes */}
-      <GlassCard variant={nodesInWarning > 0 ? 'warning' : 'default'} className="p-4">
+      <GlassCard className="p-4 flex flex-col justify-between">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className={`w-4 h-4 ${nodesInWarning > 0 ? 'text-amber-400' : 'text-slate-400'}`} />
-            <span className="text-xs font-medium text-slate-300">Nodes in Warning</span>
-          </div>
+          <span className="text-xs font-medium text-[var(--text-secondary)]">Warning Nodes</span>
           <Badge type="Rule-based" />
         </div>
 
-        <div className="mt-3 flex items-baseline justify-between">
-          <div className="flex items-baseline gap-2">
-            <span className={`text-3xl font-heading font-bold tracking-tight ${nodesInWarning > 0 ? 'text-amber-400' : 'text-white'}`}>
-              {nodesInWarning}
-            </span>
-            <span className="text-xs text-slate-400 font-mono">/ 24 total</span>
-          </div>
+        <div className="mt-2.5 flex items-baseline gap-1.5 font-tabular">
+          <span className={`text-3xl font-semibold tracking-tight ${nodesInWarning > 0 ? 'text-amber-400' : 'text-[var(--text-primary)]'}`}>
+            {nodesInWarning}
+          </span>
+          <span className="text-xs text-[var(--text-muted)] font-mono">/ 24 total</span>
         </div>
 
-        <div className="mt-2 text-[11px] text-slate-400 font-mono">
-          <span>Stress 40% – 70% (Impending breach)</span>
+        <div className="mt-2 text-[11px] text-[var(--text-muted)]">
+          {nodesInWarning > 0 ? 'Impending breach (40–70%)' : 'All systems operating within bounds'}
         </div>
       </GlassCard>
 
       {/* 4. Cascade Depth */}
-      <GlassCard className="p-4">
+      <GlassCard className="p-4 flex flex-col justify-between">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <GitMerge className="w-4 h-4 text-cyan-400" />
-            <span className="text-xs font-medium text-slate-300">Cascade Propagation</span>
-          </div>
+          <span className="text-xs font-medium text-[var(--text-secondary)]">Cascade Depth</span>
           <Badge type="Rule-based" />
         </div>
 
-        <div className="mt-3 flex items-baseline justify-between">
-          <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-heading font-bold text-white tracking-tight">
-              {cascadeDepth}
-            </span>
-            <span className="text-xs text-slate-400 font-mono">hops deep</span>
-          </div>
+        <div className="mt-2.5 flex items-baseline gap-1.5 font-tabular">
+          <span className="text-3xl font-semibold tracking-tight text-[var(--text-primary)]">
+            {cascadeDepth}
+          </span>
+          <span className="text-xs text-[var(--text-muted)] font-mono">hops deep</span>
         </div>
 
-        <div className="mt-2 text-[11px] text-slate-400 font-mono">
-          <span>{cascadeDepth === 0 ? 'Zero active chain reaction' : `${cascadeDepth} coupled infrastructure links tripped`}</span>
+        <div className="mt-2 text-[11px] text-[var(--text-muted)]">
+          {cascadeDepth === 0 ? 'Zero active secondary spread' : `${cascadeDepth} coupled links triggered`}
         </div>
       </GlassCard>
     </div>

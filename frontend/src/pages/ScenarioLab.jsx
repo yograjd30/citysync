@@ -3,7 +3,7 @@ import { GlassCard } from '../components/common/GlassCard';
 import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
 import { useSimulation } from '../context/SimulationContext';
-import { GitFork, Flame, Trophy, AlertTriangle, Droplets, CloudRain, Zap, Plus, Trash2, CheckCircle2 } from 'lucide-react';
+import { GitFork, Flame, Trophy, Droplets, CloudRain, Zap, Plus, Trash2 } from 'lucide-react';
 import { apiRequest } from '../api/client';
 
 const PRESET_EVENTS = [
@@ -14,19 +14,17 @@ const PRESET_EVENTS = [
     startStep: 110,
     durationSteps: 72,
     icon: Flame,
-    color: 'rose',
-    description: 'Citywide extreme heatwave surges air-conditioning draw and lowers water line pressure.',
+    description: 'Elevated ambient temperature surges residential cooling demand and lowers water pressure.',
   },
   {
-    title: 'Stadium Championship Match',
+    title: 'Stadium Match Egress',
     type: 'stadium_event',
     zoneId: 'stadium',
     severity: 95,
     startStep: 160,
     durationSteps: 48,
     icon: Trophy,
-    color: 'amber',
-    description: '65,000 spectators cause severe congestion, then flood local electricity and water grids.',
+    description: '65,000 spectators exit into arterials, causing immediate congestion and delayed grid spike.',
   },
   {
     title: 'Industrial Feeder Pipe Burst',
@@ -36,8 +34,7 @@ const PRESET_EVENTS = [
     startStep: 120,
     durationSteps: 40,
     icon: Droplets,
-    color: 'teal',
-    description: 'Major arterial water rupture collapses industrial pressure and triggers backup electric booster pumps.',
+    description: 'Catastrophic rupture on primary industrial main; engages auxiliary electric pumps.',
   },
   {
     title: 'Downtown Substation Outage',
@@ -47,8 +44,7 @@ const PRESET_EVENTS = [
     startStep: 130,
     durationSteps: 30,
     icon: Zap,
-    color: 'yellow',
-    description: 'Commercial core power loss trips automated traffic signals into fail-safe mode.',
+    description: 'Transformer trip in commercial core; downgrades traffic signals into fail-safe flashing yellows.',
   },
   {
     title: 'Monsoon Downpour',
@@ -57,37 +53,16 @@ const PRESET_EVENTS = [
     startStep: 90,
     durationSteps: 36,
     icon: CloudRain,
-    color: 'cyan',
-    description: 'Heavy rainfall slows traffic speeds citywide by 45%.',
+    description: 'High precipitation reduces arterial travel speeds by 45% citywide.',
   },
 ];
 
 export function ScenarioLab() {
-  const { activeEvents, addEvent, removeEvent, clearEvents, step, setStep, currentState, config } = useSimulation();
+  const { activeEvents, addEvent, removeEvent, clearEvents, step, currentState } = useSimulation();
 
-  // Custom event builder state
-  const [eventType, setEventType] = useState('heatwave');
-  const [zoneId, setZoneId] = useState('downtown');
-  const [severity, setSeverity] = useState(80);
-  const [startStep, setStartStep] = useState(120);
-  const [durationSteps, setDurationSteps] = useState(36);
-
-  // Future Fork (Branching Timelines) state
-  const [isForked, setIsForked] = useState(true);
   const [forkIntervention, setForkIntervention] = useState('reroute_traffic');
   const [forkComparison, setForkComparison] = useState(null);
   const [simulatingFork, setSimulatingFork] = useState(false);
-
-  const handleAddCustomEvent = (e) => {
-    e.preventDefault();
-    addEvent({
-      type: eventType,
-      zoneId: eventType === 'heatwave' || eventType === 'rain' ? null : zoneId,
-      severity,
-      startStep,
-      durationSteps,
-    });
-  };
 
   const runForkSimulation = async () => {
     setSimulatingFork(true);
@@ -97,7 +72,7 @@ export function ScenarioLab() {
         body: JSON.stringify({
           step,
           activeEvents,
-          interventions: [{ actionId: forkIntervention, targetZone: zoneId }],
+          interventions: [{ actionId: forkIntervention, targetZone: 'downtown' }],
         }),
       });
       setForkComparison(res);
@@ -109,39 +84,37 @@ export function ScenarioLab() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="font-heading text-xl font-bold text-white">Scenario Lab &amp; Future Fork</h2>
+            <h2 className="text-base font-semibold text-[var(--text-primary)]">Scenario Lab &amp; Future Fork</h2>
             <Badge type="Simulated" />
           </div>
-          <p className="text-xs text-slate-400 mt-1 max-w-2xl">
-            Inject extreme events into the city nervous system. Fork the future timeline to contrast baseline degradation
-            against active mitigation strategies.
+          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+            Inject synthetic perturbations into the city network. Fork the future timeline to measure mitigation efficacy.
           </p>
         </div>
 
         {activeEvents.length > 0 && (
           <Button variant="danger" size="sm" icon={Trash2} onClick={clearEvents}>
-            Clear All Events ({activeEvents.length})
+            Clear Events ({activeEvents.length})
           </Button>
         )}
       </div>
 
-      {/* Preset Incident Cards */}
+      {/* Preset Incident Tiles */}
       <div>
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 font-mono">
-          One-Click Incident Presets
-        </h3>
+        <div className="text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-2 font-mono">
+          Stress Injections
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           {PRESET_EVENTS.map((preset, idx) => {
             const Icon = preset.icon;
             return (
-              <GlassCard
+              <div
                 key={idx}
-                className="p-3 flex flex-col justify-between hover:border-teal-500/50 transition-all cursor-pointer group"
                 onClick={() =>
                   addEvent({
                     type: preset.type,
@@ -151,86 +124,80 @@ export function ScenarioLab() {
                     durationSteps: preset.durationSteps,
                   })
                 }
+                className="p-3.5 rounded-xl bg-[var(--surface-card)] border border-[var(--hairline)] hover:border-[var(--hairline-focused)] hover:bg-[var(--surface-raised)] transition-colors cursor-pointer flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between pb-2">
-                    <Icon className="w-5 h-5 text-teal-400 group-hover:scale-110 transition-transform" />
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-teal-300">
+                    <Icon className="w-4 h-4 text-cyan-400" />
+                    <span className="text-[10px] font-mono text-[var(--text-muted)]">
                       Sev {preset.severity}%
                     </span>
                   </div>
-                  <h4 className="font-heading text-xs font-bold text-white group-hover:text-teal-300 transition-colors">
-                    {preset.title}
-                  </h4>
-                  <p className="text-[11px] text-slate-400 mt-1 line-clamp-2">{preset.description}</p>
+                  <h4 className="text-xs font-semibold text-[var(--text-primary)]">{preset.title}</h4>
+                  <p className="text-[11px] text-[var(--text-secondary)] mt-1 line-clamp-2 leading-relaxed">
+                    {preset.description}
+                  </p>
                 </div>
 
-                <div className="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[10px] font-mono text-teal-400">
+                <div className="mt-3 pt-2 border-t border-[var(--hairline)] flex items-center justify-between text-[11px] font-mono text-cyan-400">
                   <span>+ Inject Event</span>
-                  <Plus className="w-3.5 h-3.5" />
+                  <Plus className="w-3 h-3" />
                 </div>
-              </GlassCard>
+              </div>
             );
           })}
         </div>
       </div>
 
-      {/* Signature Innovation: Future Fork Dual-Lane Timeline */}
-      <GlassCard className="p-5 border-teal-500/40 relative overflow-hidden">
-        <div className="flex items-center justify-between pb-4 border-b border-white/5">
+      {/* Signature Innovation: Future Fork */}
+      <GlassCard className="p-4 flex flex-col gap-3.5">
+        <div className="flex items-center justify-between pb-2.5 border-b border-[var(--hairline)]">
           <div className="flex items-center gap-2">
-            <GitFork className="w-5 h-5 text-teal-400" />
-            <h3 className="font-heading text-base font-bold text-white">
+            <GitFork className="w-4 h-4 text-cyan-400" />
+            <h3 className="text-xs font-semibold text-[var(--text-primary)]">
               Future Fork: Branching Timeline Simulator
             </h3>
           </div>
           <Badge type="Rule-based" />
         </div>
 
-        <p className="text-xs text-slate-300 mt-2">
-          Fork the timeline from current tick <strong>{step}</strong>. The baseline continues unmitigated on Lane 1, while
-          Lane 2 runs your proposed intervention to measure the delta stability gain.
+        <p className="text-xs text-[var(--text-secondary)]">
+          Branch reality from tick <strong className="text-[var(--text-primary)] font-mono">{step}</strong>.
+          Lane 1 tracks unmitigated degradation; Lane 2 simulates selected counter-measures.
         </p>
 
-        {/* Dual Lane Visualizer */}
-        <div className="mt-5 space-y-4">
-          {/* Lane 1: Baseline Timeline */}
-          <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-400 animate-pulse" />
+        {/* Dual Lanes */}
+        <div className="space-y-2.5 mt-1">
+          {/* Lane 1 */}
+          <div className="p-3 rounded-lg bg-[var(--surface-raised)] border border-[var(--hairline)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-rose-500" />
               <div>
-                <div className="text-xs font-bold text-white flex items-center gap-2">
-                  Lane 1: Unmitigated Baseline
-                  <Badge variant="critical">No Intervention</Badge>
-                </div>
-                <div className="text-[11px] text-slate-400 mt-0.5 font-mono">
+                <span className="font-medium text-[var(--text-primary)]">Lane 1: Unmitigated Baseline</span>
+                <div className="text-[11px] text-[var(--text-muted)] font-mono mt-0.5">
                   Stability Index: {currentState?.stabilityIndex} | Critical Nodes: {currentState?.nodesInCritical}
                 </div>
               </div>
             </div>
-
-            <span className="text-xs font-mono text-rose-400 font-semibold">Cascades Spreading Freely</span>
+            <span className="text-[11px] font-mono text-rose-400">Cascades Propagating Freely</span>
           </div>
 
-          {/* Lane 2: Forked Mitigation Timeline */}
-          <div className="p-3.5 rounded-xl bg-teal-950/30 border border-teal-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-teal-400" />
+          {/* Lane 2 */}
+          <div className="p-3 rounded-lg bg-[var(--surface-raised)] border border-[var(--hairline)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
               <div>
-                <div className="text-xs font-bold text-white flex items-center gap-2">
-                  Lane 2: Forked Timeline (With Mitigation)
-                  <Badge variant="normal">Branch Active</Badge>
-                </div>
-                <div className="flex items-center gap-2 mt-1.5">
+                <span className="font-medium text-[var(--text-primary)]">Lane 2: Mitigated Fork</span>
+                <div className="mt-1 flex items-center gap-2">
                   <select
                     value={forkIntervention}
                     onChange={(e) => setForkIntervention(e.target.value)}
-                    className="bg-slate-900 border border-slate-700 text-xs text-white rounded px-2 py-1 focus:outline-none"
+                    className="bg-[var(--surface-page)] border border-[var(--hairline)] text-xs text-[var(--text-primary)] rounded px-2 py-1 focus:outline-none"
                   >
                     <option value="reroute_traffic">Dynamic Arterial Rerouting</option>
                     <option value="retime_signals">Adaptive Green-Wave Signals</option>
                     <option value="shed_industrial_load">Industrial Load Curtailment</option>
-                    <option value="start_backup_pump">Municipal Booster Pumps</option>
+                    <option value="start_backup_pump">Auxiliary Municipal Booster</option>
                   </select>
                 </div>
               </div>
@@ -242,24 +209,24 @@ export function ScenarioLab() {
           </div>
         </div>
 
-        {/* Fork Comparison Scoreboard */}
+        {/* Scoreboard */}
         {forkComparison && (
-          <div className="mt-4 p-4 rounded-xl bg-slate-950/80 border border-teal-500/30 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+          <div className="mt-2 p-3 rounded-lg bg-[var(--surface-raised)] border border-[var(--hairline)] grid grid-cols-3 gap-3 text-center font-tabular">
             <div>
-              <div className="text-[11px] text-slate-400 font-mono">Stability Gain</div>
-              <div className="text-2xl font-heading font-bold text-teal-400 mt-0.5">
+              <div className="text-[11px] text-[var(--text-muted)] font-mono">Stability Gain</div>
+              <div className="text-xl font-semibold text-emerald-400 mt-0.5">
                 +{forkComparison.deltaStability} pts
               </div>
             </div>
             <div>
-              <div className="text-[11px] text-slate-400 font-mono">Critical Nodes Saved</div>
-              <div className="text-2xl font-heading font-bold text-cyan-400 mt-0.5">
+              <div className="text-[11px] text-[var(--text-muted)] font-mono">Critical Nodes Saved</div>
+              <div className="text-xl font-semibold text-cyan-400 mt-0.5">
                 {forkComparison.criticalReduced} Nodes
               </div>
             </div>
             <div>
-              <div className="text-[11px] text-slate-400 font-mono">Improvement Efficacy</div>
-              <div className="text-2xl font-heading font-bold text-emerald-400 mt-0.5">
+              <div className="text-[11px] text-[var(--text-muted)] font-mono">Improvement Rate</div>
+              <div className="text-xl font-semibold text-[var(--text-primary)] mt-0.5">
                 +{forkComparison.pctImprovement}%
               </div>
             </div>
@@ -267,31 +234,31 @@ export function ScenarioLab() {
         )}
       </GlassCard>
 
-      {/* Active Injected Events Table */}
+      {/* Active Injections Table */}
       {activeEvents.length > 0 && (
         <GlassCard className="p-4">
-          <h3 className="font-heading text-sm font-semibold text-white mb-3">
+          <h3 className="text-xs font-semibold text-[var(--text-primary)] mb-2.5">
             Active Scenario Injections ({activeEvents.length})
           </h3>
-          <div className="divide-y divide-white/5">
+          <div className="divide-y divide-[var(--hairline)]">
             {activeEvents.map((evt, idx) => (
-              <div key={idx} className="py-2.5 flex items-center justify-between text-xs">
+              <div key={idx} className="py-2 flex items-center justify-between text-xs font-mono">
                 <div className="flex items-center gap-3">
-                  <span className="font-semibold text-white capitalize">{evt.type.replace('_', ' ')}</span>
-                  {evt.zoneId && (
-                    <span className="text-slate-400 font-mono">Zone: {evt.zoneId}</span>
-                  )}
-                  <span className="text-amber-400 font-mono">Severity: {evt.severity}%</span>
-                  <span className="text-slate-400 font-mono">
-                    Ticks: {evt.startStep} – {evt.startStep + evt.durationSteps}
+                  <span className="font-semibold text-[var(--text-primary)] capitalize">
+                    {evt.type.replace('_', ' ')}
+                  </span>
+                  {evt.zoneId && <span className="text-[var(--text-muted)]">Zone: {evt.zoneId}</span>}
+                  <span className="text-amber-400">Sev: {evt.severity}%</span>
+                  <span className="text-[var(--text-muted)]">
+                    Ticks {evt.startStep}–{evt.startStep + evt.durationSteps}
                   </span>
                 </div>
                 <button
                   onClick={() => removeEvent(idx)}
                   className="p-1 rounded text-rose-400 hover:bg-rose-500/10"
-                  title="Remove Event"
+                  title="Remove"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
             ))}

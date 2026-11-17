@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { GlassCard } from './GlassCard';
-import { Search, Command, X, Play, Pause, Flame, GitFork, ShieldAlert, Cpu, FileText } from 'lucide-react';
+import { Search, X, Play, Flame, GitFork, ShieldAlert, Cpu } from 'lucide-react';
 import { useSimulation } from '../../context/SimulationContext';
 
 export function CommandBar({ isOpen, onClose, onNavigate }) {
   const [query, setQuery] = useState('');
-  const { togglePlay, addEvent, setStep } = useSimulation();
+  const { togglePlay, addEvent } = useSimulation();
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -58,18 +57,17 @@ export function CommandBar({ isOpen, onClose, onNavigate }) {
       onNavigate('models');
       onClose();
     } else {
-      // Default to navigating to dashboard
       onNavigate('dashboard');
       onClose();
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 p-4 bg-slate-950/80 backdrop-blur-md">
-      <div className="w-full max-w-xl bg-slate-900 border border-teal-500/50 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 p-4 bg-black/70 backdrop-blur-xs">
+      <div className="w-full max-w-lg bg-[var(--surface-card)] border border-[var(--hairline-focused)] rounded-xl shadow-2xl overflow-hidden flex flex-col">
         {/* Input Bar */}
-        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-white/10">
-          <Search className="w-5 h-5 text-teal-400" />
+        <div className="flex items-center gap-3 px-3.5 py-3 border-b border-[var(--hairline)]">
+          <Search className="w-4 h-4 text-[var(--text-muted)]" />
           <input
             type="text"
             autoFocus
@@ -78,68 +76,49 @@ export function CommandBar({ isOpen, onClose, onNavigate }) {
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleCommand(query);
             }}
-            placeholder="Type a command or jump: 'heatwave 80%', 'stadium event', 'run sim'..."
-            className="flex-1 bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none"
+            placeholder="Type command or jump: 'heatwave', 'stadium', 'run sim'..."
+            className="flex-1 bg-transparent text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none"
           />
-          <button onClick={onClose} className="p-1 rounded text-slate-400 hover:text-white">
-            <X className="w-4 h-4" />
+          <button onClick={onClose} className="p-1 rounded text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+            <X className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* Quick Suggestions */}
-        <div className="p-3 divide-y divide-white/5 text-xs">
-          <div className="pb-2 text-[11px] font-mono text-slate-500 uppercase tracking-wider">
-            Quick Actions &amp; Navigation
+        {/* Suggestions */}
+        <div className="p-2 divide-y divide-[var(--hairline)] text-xs">
+          <div className="py-2 px-2.5 rounded-lg flex items-center justify-between hover:bg-white/[0.04] cursor-pointer text-[var(--text-secondary)] hover:text-[var(--text-primary)]" onClick={() => handleCommand('heatwave')}>
+            <span className="flex items-center gap-2">
+              <Flame className="w-3.5 h-3.5 text-rose-400" /> Inject 38°C Urban Heatwave
+            </span>
+            <span className="text-[10px] text-[var(--text-muted)] font-mono">Action</span>
           </div>
 
-          <div
-            onClick={() => handleCommand('heatwave')}
-            className="py-2 px-2.5 rounded-lg flex items-center justify-between hover:bg-white/5 cursor-pointer text-slate-200"
-          >
+          <div className="py-2 px-2.5 rounded-lg flex items-center justify-between hover:bg-white/[0.04] cursor-pointer text-[var(--text-secondary)] hover:text-[var(--text-primary)]" onClick={() => handleCommand('stadium')}>
             <span className="flex items-center gap-2">
-              <Flame className="w-4 h-4 text-rose-400" /> Inject 38°C Urban Heatwave
+              <GitFork className="w-3.5 h-3.5 text-amber-400" /> Inject Stadium Match Egress
             </span>
-            <span className="text-[10px] text-slate-500 font-mono">Action</span>
+            <span className="text-[10px] text-[var(--text-muted)] font-mono">Action</span>
           </div>
 
-          <div
-            onClick={() => handleCommand('stadium')}
-            className="py-2 px-2.5 rounded-lg flex items-center justify-between hover:bg-white/5 cursor-pointer text-slate-200"
-          >
+          <div className="py-2 px-2.5 rounded-lg flex items-center justify-between hover:bg-white/[0.04] cursor-pointer text-[var(--text-secondary)] hover:text-[var(--text-primary)]" onClick={() => handleCommand('play')}>
             <span className="flex items-center gap-2">
-              <GitFork className="w-4 h-4 text-amber-400" /> Inject Stadium Match Egress
+              <Play className="w-3.5 h-3.5 text-emerald-400" /> Toggle Simulation Clock (Play / Pause)
             </span>
-            <span className="text-[10px] text-slate-500 font-mono">Action</span>
+            <span className="text-[10px] text-[var(--text-muted)] font-mono">Sim</span>
           </div>
 
-          <div
-            onClick={() => handleCommand('play')}
-            className="py-2 px-2.5 rounded-lg flex items-center justify-between hover:bg-white/5 cursor-pointer text-slate-200"
-          >
+          <div className="py-2 px-2.5 rounded-lg flex items-center justify-between hover:bg-white/[0.04] cursor-pointer text-[var(--text-secondary)] hover:text-[var(--text-primary)]" onClick={() => handleCommand('graph')}>
             <span className="flex items-center gap-2">
-              <Play className="w-4 h-4 text-teal-400" /> Toggle Simulation Clock (Play / Pause)
+              <ShieldAlert className="w-3.5 h-3.5 text-cyan-400" /> Jump to Ripple Engine
             </span>
-            <span className="text-[10px] text-slate-500 font-mono">Sim</span>
+            <span className="text-[10px] text-[var(--text-muted)] font-mono">View</span>
           </div>
 
-          <div
-            onClick={() => handleCommand('graph')}
-            className="py-2 px-2.5 rounded-lg flex items-center justify-between hover:bg-white/5 cursor-pointer text-slate-200"
-          >
+          <div className="py-2 px-2.5 rounded-lg flex items-center justify-between hover:bg-white/[0.04] cursor-pointer text-[var(--text-secondary)] hover:text-[var(--text-primary)]" onClick={() => handleCommand('models')}>
             <span className="flex items-center gap-2">
-              <ShieldAlert className="w-4 h-4 text-cyan-400" /> Jump to 24-Node Ripple Engine
+              <Cpu className="w-3.5 h-3.5 text-[var(--text-muted)]" /> Model Provenance Cards (BTP / SLDC)
             </span>
-            <span className="text-[10px] text-slate-500 font-mono">View</span>
-          </div>
-
-          <div
-            onClick={() => handleCommand('models')}
-            className="py-2 px-2.5 rounded-lg flex items-center justify-between hover:bg-white/5 cursor-pointer text-slate-200"
-          >
-            <span className="flex items-center gap-2">
-              <Cpu className="w-4 h-4 text-teal-400" /> Inspect Model Provenance (BTP / SLDC)
-            </span>
-            <span className="text-[10px] text-slate-500 font-mono">View</span>
+            <span className="text-[10px] text-[var(--text-muted)] font-mono">View</span>
           </div>
         </div>
       </div>
