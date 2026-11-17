@@ -1,0 +1,50 @@
+[
+  {
+    "id": "downtown",
+    "name": "Downtown",
+    "population": 85000,
+    "type": "commercial_core"
+  },
+  {
+    "id": "tech_park",
+    "name": "Tech Park",
+    "population": 65000,
+    "type": "high_tech_offices"
+  },
+  {
+    "id": "res_north",
+    "name": "Residential North",
+    "population": 110000,
+    "type": "dense_residential"
+  },
+  {
+    "id": "res_south",
+    "name": "Residential South",
+    "population": 95000,
+    "type": "suburban_residential"
+  },
+  {
+    "id": "industrial",
+    "name": "Industrial Estate",
+    "population": 30000,
+    "type": "heavy_industry"
+  },
+  {
+    "id": "stadium",
+    "name": "Stadium District",
+    "population": 45000,
+    "type": "entertainment_sports"
+  },
+  {
+    "id": "old_town",
+    "name": "Old Town",
+    "population": 75000,
+    "type": "historic_narrow"
+  },
+  {
+    "id": "port_airport",
+    "name": "Port & Airport",
+    "population": 25000,
+    "type": "transport_logistics"
+  }
+]
