@@ -1,0 +1,200 @@
+{
+  "traffic": {
+    "model_type": "RandomForestRegressor",
+    "hyperparameters": {
+      "n_estimators": 50,
+      "max_depth": 10,
+      "random_state": 42
+    },
+    "dataset_name": "Bengaluru Traffic Police Congestion Series",
+    "source_type": "real",
+    "badge": "Trained ML",
+    "chip": "Real Data",
+    "license": "Open Data (data.opencity.in)",
+    "citation": "Bengaluru Traffic Police (BTP) Congestion Length Data, OpenCity.in",
+    "description": "Hourly road congestion length (km) mapped to standardized [0, 100] congestion index.",
+    "row_counts": {
+      "train": 638,
+      "validation": 137,
+      "test": 137
+    },
+    "date_range": {
+      "start": "2026-04-08 00:00:00",
+      "end": "2026-05-15 23:00:00"
+    },
+    "metrics": {
+      "mae": 2.53,
+      "rmse": 3.13,
+      "r2": 0.952
+    },
+    "baselines": {
+      "persistence": {
+        "mae": 8.08,
+        "rmse": 10.36,
+        "r2": 0.478
+      },
+      "seasonal_naive": {
+        "mae": 3.81,
+        "rmse": 5.67,
+        "r2": 0.844
+      }
+    },
+    "uncertainty_coverage_pct": 56.9,
+    "feature_importances": {
+      "hour_sin": 0.0149,
+      "hour_cos": 0.0087,
+      "day_of_week": 0.0027,
+      "is_weekend": 0.0006,
+      "lag_1": 0.0492,
+      "lag_2": 0.0039,
+      "lag_24": 0.0244,
+      "lag_168": 0.8108,
+      "rolling_mean_3h": 0.0045,
+      "rolling_std_6h": 0.0036,
+      "temperature": 0.0057,
+      "precipitation": 0.0709
+    },
+    "trained_at": "2026-11-17T05:38:17.298306Z",
+    "python_libraries": {
+      "sklearn": "1.4+",
+      "numpy": "1.26+",
+      "joblib": "1.4+"
+    }
+  },
+  "electricity": {
+    "model_type": "RandomForestRegressor",
+    "hyperparameters": {
+      "n_estimators": 50,
+      "max_depth": 10,
+      "random_state": 42
+    },
+    "dataset_name": "Karnataka SLDC / BESCOM Substation Load",
+    "source_type": "real",
+    "badge": "Trained ML",
+    "chip": "Real Data",
+    "license": "Research / Public SLDC Open Report",
+    "citation": "Karnataka State Load Despatch Centre (SLDC) & BESCOM Feeder Records",
+    "description": "Grid electricity demand profile calibrated against Karnataka SLDC load curves.",
+    "row_counts": {
+      "train": 2906,
+      "validation": 623,
+      "test": 623
+    },
+    "date_range": {
+      "start": "2026-04-02 18:00:00",
+      "end": "2026-05-15 23:45:00"
+    },
+    "metrics": {
+      "mae": 1.71,
+      "rmse": 2.14,
+      "r2": 0.979
+    },
+    "baselines": {
+      "persistence": {
+        "mae": 2.63,
+        "rmse": 3.27,
+        "r2": 0.951
+      },
+      "seasonal_naive": {
+        "mae": 18.07,
+        "rmse": 20.8,
+        "r2": -0.989
+      }
+    },
+    "uncertainty_coverage_pct": 52.5,
+    "feature_importances": {
+      "hour_sin": 0.0044,
+      "hour_cos": 0.0122,
+      "day_of_week": 0.0007,
+      "is_weekend": 0.0001,
+      "lag_1": 0.0812,
+      "lag_2": 0.0019,
+      "lag_24": 0.0019,
+      "lag_168": 0.0022,
+      "rolling_mean_3h": 0.006,
+      "rolling_std_6h": 0.0018,
+      "temperature": 0.8875,
+      "precipitation": 0.0
+    },
+    "trained_at": "2026-11-17T05:38:17.766202Z",
+    "python_libraries": {
+      "sklearn": "1.4+",
+      "numpy": "1.26+",
+      "joblib": "1.4+"
+    }
+  },
+  "water": {
+    "model_type": "RandomForestRegressor",
+    "hyperparameters": {
+      "n_estimators": 50,
+      "max_depth": 10,
+      "random_state": 42
+    },
+    "dataset_name": "CitySync Calibrated Utility Pressure Series",
+    "source_type": "synthetic",
+    "badge": "Trained ML",
+    "chip": "Synthetic",
+    "license": "MIT (CitySync Project Simulator)",
+    "citation": "Synthetic data: measures how well the model reproduces the simulator, not real-world accuracy.",
+    "description": "Deterministic water distribution line pressure modeled under peak consumption and main bursts.",
+    "row_counts": {
+      "train": 2906,
+      "validation": 623,
+      "test": 623
+    },
+    "date_range": {
+      "start": "2026-04-02 18:00:00",
+      "end": "2026-05-15 23:45:00"
+    },
+    "metrics": {
+      "mae": 1.22,
+      "rmse": 1.54,
+      "r2": 0.929
+    },
+    "baselines": {
+      "persistence": {
+        "mae": 1.89,
+        "rmse": 2.39,
+        "r2": 0.829
+      },
+      "seasonal_naive": {
+        "mae": 7.76,
+        "rmse": 9.75,
+        "r2": -1.831
+      }
+    },
+    "uncertainty_coverage_pct": 43.3,
+    "feature_importances": {
+      "hour_sin": 0.0368,
+      "hour_cos": 0.0284,
+      "day_of_week": 0.0019,
+      "is_weekend": 0.0003,
+      "lag_1": 0.8751,
+      "lag_2": 0.0058,
+      "lag_24": 0.0056,
+      "lag_168": 0.0045,
+      "rolling_mean_3h": 0.0257,
+      "rolling_std_6h": 0.016,
+      "temperature": 0.0,
+      "precipitation": 0.0
+    },
+    "trained_at": "2026-11-17T05:38:18.263595Z",
+    "python_libraries": {
+      "sklearn": "1.4+",
+      "numpy": "1.26+",
+      "joblib": "1.4+"
+    }
+  },
+  "anomaly_detection": {
+    "model_type": "IsolationForest",
+    "hyperparameters": {
+      "n_estimators": 50,
+      "contamination": 0.03,
+      "random_state": 42
+    },
+    "badge": "Trained ML",
+    "chip": "Real Data",
+    "anomaly_rate_test_pct": 2.19,
+    "trained_at": "2026-11-17T05:38:18.369318Z"
+  }
+}
